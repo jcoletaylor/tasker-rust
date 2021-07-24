@@ -1,0 +1,41 @@
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+[tasks.build]
+command = "cargo"
+args = ["build"]
+
+[tasks.test]
+command = "bash"
+args = ["scripts/local_tests.sh"]
+dependencies = ["format", "build"]
+
+[tasks.doc]
+command = "cargo"
+args = ["doc"]
+dependencies = ["format", "build", "test"]
+
+[tasks.release]
+command = "cargo"
+args = ["build", "--release", "--bin", "tasker"]
+dependencies = ["clean"]
+
+[tasks.rebuild]
+command = "cargo"
+args = ["build"]
+dependencies = ["format", "clean"]
+
+[tasks.start]
+command = "cargo"
+args = ["run", "--bin", "tasker"]
+dependencies = ["build"]
+
+[tasks.docker]
+command = "docker"
+args = ["build", "."]
