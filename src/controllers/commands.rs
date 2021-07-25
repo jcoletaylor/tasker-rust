@@ -3,12 +3,12 @@ use tide::{Body, Response, StatusCode};
 
 use crate::db::commands;
 use crate::state;
+use crate::controllers::helpers;
 
 pub async fn get(req: tide::Request<state::State>) -> tide::Result {
     let db_pool = req.state().db_pool.clone();
     // let cache = req.state().cache.clone();
-    let command_id_str = req.param("command_id")?;
-    let command_id = command_id_str.to_string().parse::<i64>()?;
+    let command_id = req.param("command_id")?.to_string().parse::<i64>()?;
     let maybe_command = commands::get(command_id, &db_pool).await;
     match maybe_command {
         Ok(command) => {
@@ -28,7 +28,8 @@ pub async fn get(req: tide::Request<state::State>) -> tide::Result {
 pub async fn get_all(req: tide::Request<state::State>) -> tide::Result {
     let db_pool = req.state().db_pool.clone();
     // let cache = req.state().cache.clone();
-    let maybe_commands = commands::get_all(&db_pool).await;
+    let bounds: helpers::QueryBounds = helpers::get_limit_offset(&req);
+    let maybe_commands = commands::get_all(&db_pool, bounds.limit, bounds.offset).await;
     match maybe_commands {
         Ok(commands) => {
             let mut res = Response::new(StatusCode::Ok);

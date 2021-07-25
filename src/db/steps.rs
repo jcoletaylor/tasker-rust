@@ -1,19 +1,25 @@
 use anyhow;
-use sqlx::{query_as, Error as SqlxError, PgPool};
+use sqlx::{query_as, PgPool};
 
 use crate::errors::RepositoryError;
-use crate::helpers;
 use crate::models::db;
 
 pub async fn get(
     command_id: i64,
     workflow_step_id: i64,
     db_pool: &PgPool,
-) -> Result<db::WorkflowStep, anyhow::Error> {
+) -> Result<db::WorkflowStepWithJoinsRow, anyhow::Error> {
     let maybe_workflow_step= query_as!(
-        db::WorkflowStep,
+        db::WorkflowStepWithJoinsRow,
         r#"
-        SELECT workflow_steps.* FROM workflow_steps WHERE workflow_steps.command_id = $1 AND workflow_steps.workflow_step_id = $2
+        SELECT
+            workflow_steps.*,
+            named_steps.name AS named_step
+        FROM workflow_steps
+            INNER JOIN named_steps USING (named_step_id)
+        WHERE 
+            workflow_steps.command_id = $1
+            AND workflow_steps.workflow_step_id = $2
         "#,
         command_id,
         workflow_step_id
@@ -33,15 +39,28 @@ pub async fn get(
 }
 
 pub async fn get_all(
-    command_id: i64,
     db_pool: &PgPool,
-) -> Result<Vec<db::WorkflowStep>, anyhow::Error> {
+    command_id: i64,
+    limit: i64,
+    offset: i64
+) -> Result<Vec<db::WorkflowStepWithJoinsRow>, anyhow::Error> {
     let workflow_steps = query_as!(
-        db::WorkflowStep,
+        db::WorkflowStepWithJoinsRow,
         r#"
-        SELECT workflow_steps.* FROM workflow_steps WHERE workflow_steps.command_id = $1
+        SELECT
+            workflow_steps.*,
+            named_steps.name AS named_step
+        FROM workflow_steps
+            INNER JOIN named_steps USING (named_step_id)
+        WHERE 
+            workflow_steps.command_id = $1
+        ORDER BY workflow_steps.workflow_step_id ASC
+        LIMIT $2
+        OFFSET $3
         "#,
-        command_id
+        command_id,
+        limit,
+        offset
     )
     .fetch_all(db_pool)
     .await?;
