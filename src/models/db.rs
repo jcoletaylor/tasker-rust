@@ -77,8 +77,21 @@ pub struct AnnotationType {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertAnnotationType {
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct CommandAnnotation {
     pub command_annotation_id: i64,
+    pub command_id: i32,
+    pub annotation_type_id: i32,
+    pub annotation: Option<JsonValue>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertCommandAnnotation {
     pub command_id: i32,
     pub annotation_type_id: i32,
     pub annotation: Option<JsonValue>,
@@ -94,6 +107,14 @@ pub struct DependentSystemObjectMap {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertDependentSystemObjectMap {
+    pub dependent_system_one_id: i32,
+    pub dependent_system_two_id: i32,
+    pub remote_id_one: String,
+    pub remote_id_two: String,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct DependentSystem {
     pub dependent_system_id: i32,
     pub name: String,
@@ -101,8 +122,20 @@ pub struct DependentSystem {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertDependentSystem {
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct NamedCommand {
     pub named_command_id: i32,
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertNamedCommand {
     pub name: String,
     pub description: Option<String>,
 }
@@ -118,8 +151,24 @@ pub struct NamedCommandsNamedStep {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertNamedCommandsNamedStep {
+    pub named_command_id: i32,
+    pub named_step_id: i32,
+    pub skippable: bool,
+    pub default_retryable: bool,
+    pub default_retry_limit: i32,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct NamedStep {
     pub named_step_id: i32,
+    pub dependent_system_id: i32,
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct UpsertNamedStep {
     pub dependent_system_id: i32,
     pub name: String,
     pub description: Option<String>,
