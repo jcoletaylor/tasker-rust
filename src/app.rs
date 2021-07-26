@@ -4,7 +4,7 @@ use tide::security::{CorsMiddleware, Origin};
 use tide::Server;
 
 use crate::cache::RedisStore;
-use crate::controllers::commands;
+use crate::controllers::tasks;
 use crate::controllers::steps;
 use crate::state;
 
@@ -29,18 +29,18 @@ pub async fn make_server(db_pool: PgPool, cache: RedisStore) -> Server<state::St
         .allow_credentials(false);
     app.with(cors);
 
-    app.at("/v1/commands").get(commands::get_all);
-    // app.at("/v1/commands").post(commands::create);
-    app.at("/v1/commands/:command_id").get(commands::get);
-    // app.at("/v1/commands/:command_id").put(commands::update);
-    // app.at("/v1/commands/:command_id").delete(commands::delete);
+    app.at("/v1/tasks").get(tasks::get_all);
+    // app.at("/v1/tasks").post(tasks::create);
+    app.at("/v1/tasks/:task_id").get(tasks::get);
+    // app.at("/v1/tasks/:task_id").put(tasks::update);
+    // app.at("/v1/tasks/:task_id").delete(tasks::delete);
 
-    app.at("/v1/commands/:command_id/steps").get(steps::get_all);
-    // app.at("/v1/commands/:command_id/steps").post(steps::create);
-    app.at("/v1/commands/:command_id/steps/:step_id")
+    app.at("/v1/tasks/:task_id/steps").get(steps::get_all);
+    // app.at("/v1/tasks/:task_id/steps").post(steps::create);
+    app.at("/v1/tasks/:task_id/steps/:step_id")
         .get(steps::get);
-    // app.at("/v1/commands/:command_id/steps/:step_id").put(steps::update);
-    // app.at("/v1/commands/:command_id/steps/:step_id").delete(steps::delete);
+    // app.at("/v1/tasks/:task_id/steps/:step_id").put(steps::update);
+    // app.at("/v1/tasks/:task_id/steps/:step_id").delete(steps::delete);
 
     app
 }

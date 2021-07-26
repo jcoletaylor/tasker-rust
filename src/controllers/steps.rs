@@ -8,9 +8,9 @@ use crate::controllers::helpers;
 pub async fn get(req: tide::Request<state::State>) -> tide::Result {
     let db_pool = req.state().db_pool.clone();
     // let cache = req.state().cache.clone();
-    let command_id = req.param("command_id")?.to_string().parse::<i64>()?;
+    let task_id = req.param("task_id")?.to_string().parse::<i64>()?;
     let step_id = req.param("step_id")?.to_string().parse::<i64>()?;
-    let maybe_step = steps::get(command_id, step_id, &db_pool).await;
+    let maybe_step = steps::get(task_id, step_id, &db_pool).await;
     match maybe_step {
         Ok(step) => {
             let mut res = Response::new(StatusCode::Ok);
@@ -29,9 +29,9 @@ pub async fn get(req: tide::Request<state::State>) -> tide::Result {
 pub async fn get_all(req: tide::Request<state::State>) -> tide::Result {
     let db_pool = req.state().db_pool.clone();
     // let cache = req.state().cache.clone();
-    let command_id = req.param("command_id")?.to_string().parse::<i64>()?;
+    let task_id = req.param("task_id")?.to_string().parse::<i64>()?;
     let bounds: helpers::QueryBounds = helpers::get_limit_offset(&req);
-    let maybe_steps = steps::get_all(&db_pool, command_id, bounds.limit, bounds.offset).await;
+    let maybe_steps = steps::get_all(&db_pool, task_id, bounds.limit, bounds.offset).await;
     match maybe_steps {
         Ok(steps) => {
             let mut res = Response::new(StatusCode::Ok);

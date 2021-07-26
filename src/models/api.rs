@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct Command {
-    pub command_id: i64,
-    pub named_command_id: i32,
+pub struct Task {
+    pub task_id: i64,
+    pub named_task_id: i32,
     pub status: String,
     pub complete: bool,
     pub requested_at: DateTime<Utc>,
@@ -19,8 +19,8 @@ pub struct Command {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct UpsertCommand {
-    pub named_command_id: i32,
+pub struct UpsertTask {
+    pub named_task_id: i32,
     pub status: String,
     pub requested_at: DateTime<Utc>,
     pub complete: bool,
@@ -34,10 +34,10 @@ pub struct UpsertCommand {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct CommandWithJoinsRow {
-    pub command_id: i64,
-    pub named_command_id: i32,
-    pub named_command: String,
+pub struct TaskWithJoinsRow {
+    pub task_id: i64,
+    pub named_task_id: i32,
+    pub named_task: String,
     pub status: String,
     pub complete: bool,
     pub requested_at: DateTime<Utc>,
@@ -68,7 +68,7 @@ pub struct CommandWithJoinsRow {
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct WorkflowStep {
     pub workflow_step_id: i64,
-    pub command_id: i64,
+    pub task_id: i64,
     pub named_step_id: i32,
     pub depends_on_step_id: Option<i64>,
     pub status: String,
@@ -104,7 +104,7 @@ pub struct UpsertWorkflowStep {
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct WorkflowStepWithJoinsRow {
     pub workflow_step_id: i64,
-    pub command_id: i64,
+    pub task_id: i64,
     pub named_step_id: i32,
     pub named_step: String,
     pub depends_on_step_id: Option<i64>,
@@ -135,16 +135,16 @@ pub struct UpsertAnnotationType {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct CommandAnnotation {
-    pub command_annotation_id: i64,
-    pub command_id: i32,
+pub struct TaskAnnotation {
+    pub task_annotation_id: i64,
+    pub task_id: i32,
     pub annotation_type_id: i32,
     pub annotation: Option<JsonValue>,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct UpsertCommandAnnotation {
-    pub command_id: i32,
+pub struct UpsertTaskAnnotation {
+    pub task_id: i32,
     pub annotation_type_id: i32,
     pub annotation: Option<JsonValue>,
 }
@@ -180,22 +180,22 @@ pub struct UpsertDependentSystem {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct NamedCommand {
-    pub named_command_id: i32,
+pub struct NamedTask {
+    pub named_task_id: i32,
     pub name: String,
     pub description: Option<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct UpsertNamedCommand {
+pub struct UpsertNamedTask {
     pub name: String,
     pub description: Option<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct NamedCommandsNamedStep {
+pub struct NamedtasksNamedStep {
     pub id: i32,
-    pub named_command_id: i32,
+    pub named_task_id: i32,
     pub named_step_id: i32,
     pub skippable: bool,
     pub default_retryable: bool,
@@ -203,8 +203,8 @@ pub struct NamedCommandsNamedStep {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct UpsertNamedCommandsNamedStep {
-    pub named_command_id: i32,
+pub struct UpsertNamedtasksNamedStep {
+    pub named_task_id: i32,
     pub named_step_id: i32,
     pub skippable: bool,
     pub default_retryable: bool,

@@ -5,7 +5,7 @@ use crate::errors::RepositoryError;
 use crate::models::db;
 
 pub async fn get(
-    command_id: i64,
+    task_id: i64,
     workflow_step_id: i64,
     db_pool: &PgPool,
 ) -> Result<db::WorkflowStepWithJoinsRow, anyhow::Error> {
@@ -18,10 +18,10 @@ pub async fn get(
         FROM workflow_steps
             INNER JOIN named_steps USING (named_step_id)
         WHERE 
-            workflow_steps.command_id = $1
+            workflow_steps.task_id = $1
             AND workflow_steps.workflow_step_id = $2
         "#,
-        command_id,
+        task_id,
         workflow_step_id
     )
     .fetch_optional(db_pool)
@@ -40,7 +40,7 @@ pub async fn get(
 
 pub async fn get_all(
     db_pool: &PgPool,
-    command_id: i64,
+    task_id: i64,
     limit: i64,
     offset: i64
 ) -> Result<Vec<db::WorkflowStepWithJoinsRow>, anyhow::Error> {
@@ -53,12 +53,12 @@ pub async fn get_all(
         FROM workflow_steps
             INNER JOIN named_steps USING (named_step_id)
         WHERE 
-            workflow_steps.command_id = $1
+            workflow_steps.task_id = $1
         ORDER BY workflow_steps.workflow_step_id ASC
         LIMIT $2
         OFFSET $3
         "#,
-        command_id,
+        task_id,
         limit,
         offset
     )

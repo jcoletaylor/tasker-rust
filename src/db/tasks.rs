@@ -5,26 +5,26 @@ use crate::errors::RepositoryError;
 use crate::models::db;
 
 pub async fn get(
-    command_id: i64,
+    task_id: i64,
     db_pool: &PgPool,
-) -> Result<db::CommandWithJoinsRow, anyhow::Error> {
-    let maybe_command = query_as!(
-        db::CommandWithJoinsRow,
+) -> Result<db::TaskWithJoinsRow, anyhow::Error> {
+    let maybe_task = query_as!(
+        db::TaskWithJoinsRow,
         r#"
         SELECT 
-            commands.command_id,
-            commands.named_command_id,
-            named_commands.name AS named_command,
-            commands.status,
-            commands.complete,
-            commands.requested_at,
-            commands.initiator,
-            commands.source_system,
-            commands.reason,
-            commands.bypass_steps,
-            commands.tags,
-            commands.context,
-            commands.identity_hash,
+            tasks.task_id,
+            tasks.named_task_id,
+            named_tasks.name AS named_task,
+            tasks.status,
+            tasks.complete,
+            tasks.requested_at,
+            tasks.initiator,
+            tasks.source_system,
+            tasks.reason,
+            tasks.bypass_steps,
+            tasks.tags,
+            tasks.context,
+            tasks.identity_hash,
             workflow_steps.workflow_step_id,
             workflow_steps.named_step_id,
             named_steps.name AS named_step,
@@ -40,23 +40,23 @@ pub async fn get(
             workflow_steps.backoff_request_seconds AS workflow_step_backoff_request_seconds,
             workflow_steps.inputs AS workflow_step_inputs,
             workflow_steps.results AS workflow_step_results
-        FROM commands
-            INNER JOIN named_commands USING (named_command_id)
-            INNER JOIN workflow_steps USING (command_id)
+        FROM tasks
+            INNER JOIN named_tasks USING (named_task_id)
+            INNER JOIN workflow_steps USING (task_id)
             INNER JOIN named_steps ON workflow_steps.named_step_id = named_steps.named_step_id
         WHERE 
-            commands.command_id = $1
+            tasks.task_id = $1
         "#,
-        command_id
+        task_id
     )
     .fetch_optional(db_pool)
     .await?;
-    match maybe_command {
+    match maybe_task {
         Some(command) => Ok(command),
         None => {
             let error = anyhow::Error::new(RepositoryError::new(format!(
                 "No command for {}",
-                command_id
+                task_id
             )));
             Err(error)
         }
@@ -67,24 +67,24 @@ pub async fn get_all(
     db_pool: &PgPool,
     limit: i64,
     offset: i64,
-) -> Result<Vec<db::CommandWithJoinsRow>, anyhow::Error> {
-    let commands = query_as!(
-        db::CommandWithJoinsRow,
+) -> Result<Vec<db::TaskWithJoinsRow>, anyhow::Error> {
+    let tasks = query_as!(
+        db::TaskWithJoinsRow,
         r#"
         SELECT 
-            commands.command_id,
-            commands.named_command_id,
-            named_commands.name AS named_command,
-            commands.status,
-            commands.complete,
-            commands.requested_at,
-            commands.initiator,
-            commands.source_system,
-            commands.reason,
-            commands.bypass_steps,
-            commands.tags,
-            commands.context,
-            commands.identity_hash,
+            tasks.task_id,
+            tasks.named_task_id,
+            named_tasks.name AS named_task,
+            tasks.status,
+            tasks.complete,
+            tasks.requested_at,
+            tasks.initiator,
+            tasks.source_system,
+            tasks.reason,
+            tasks.bypass_steps,
+            tasks.tags,
+            tasks.context,
+            tasks.identity_hash,
             workflow_steps.workflow_step_id,
             workflow_steps.named_step_id,
             named_steps.name AS named_step,
@@ -100,11 +100,11 @@ pub async fn get_all(
             workflow_steps.backoff_request_seconds AS workflow_step_backoff_request_seconds,
             workflow_steps.inputs AS workflow_step_inputs,
             workflow_steps.results AS workflow_step_results
-        FROM commands
-            INNER JOIN named_commands USING (named_command_id)
-            INNER JOIN workflow_steps USING (command_id)
+        FROM tasks
+            INNER JOIN named_tasks USING (named_task_id)
+            INNER JOIN workflow_steps USING (task_id)
             INNER JOIN named_steps ON workflow_steps.named_step_id = named_steps.named_step_id
-        ORDER BY commands.requested_at DESC
+        ORDER BY tasks.requested_at DESC
         LIMIT $1
         OFFSET $2
         "#,
@@ -113,5 +113,5 @@ pub async fn get_all(
     )
     .fetch_all(db_pool)
     .await?;
-    Ok(commands)
+    Ok(tasks)
 }

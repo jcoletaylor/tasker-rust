@@ -12,24 +12,24 @@ SET row_security = off;
 SET default_tablespace = '';
 
 --
--- Name: command_annotations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: task_annotations; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.command_annotations (
-    command_annotation_id bigint NOT NULL,
-    command_id integer NOT NULL,
+CREATE TABLE public.task_annotations (
+    task_annotation_id bigint NOT NULL,
+    task_id integer NOT NULL,
     annotation_type_id integer NOT NULL,
     annotation jsonb
 );
 
 
-ALTER TABLE public.command_annotations OWNER TO tasker;
+ALTER TABLE public.task_annotations OWNER TO tasker;
 
 --
--- Name: command_annotations_command_annotation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: task_annotations_task_annotation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.command_annotations_command_annotation_id_seq
+CREATE SEQUENCE public.task_annotations_task_annotation_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -37,22 +37,22 @@ CREATE SEQUENCE public.command_annotations_command_annotation_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.command_annotations_command_annotation_id_seq OWNER TO tasker;
+ALTER TABLE public.task_annotations_task_annotation_id_seq OWNER TO tasker;
 
 --
--- Name: command_annotations_command_annotation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: task_annotations_task_annotation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.command_annotations_command_annotation_id_seq OWNED BY public.command_annotations.command_annotation_id;
+ALTER SEQUENCE public.task_annotations_task_annotation_id_seq OWNED BY public.task_annotations.task_annotation_id;
 
 
 --
--- Name: commands; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.commands (
-    command_id bigint NOT NULL,
-    named_command_id integer NOT NULL,
+CREATE TABLE public.tasks (
+    task_id bigint NOT NULL,
+    named_task_id integer NOT NULL,
     status character varying(64) NOT NULL,
     complete boolean DEFAULT false NOT NULL,
     requested_at timestamp with time zone NOT NULL,
@@ -66,13 +66,13 @@ CREATE TABLE public.commands (
 );
 
 
-ALTER TABLE public.commands OWNER TO tasker;
+ALTER TABLE public.tasks OWNER TO tasker;
 
 --
--- Name: commands_command_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: tasks_task_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.commands_command_id_seq
+CREATE SEQUENCE public.tasks_task_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -80,13 +80,13 @@ CREATE SEQUENCE public.commands_command_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.commands_command_id_seq OWNER TO tasker;
+ALTER TABLE public.tasks_task_id_seq OWNER TO tasker;
 
 --
--- Name: commands_command_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: tasks_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.commands_command_id_seq OWNED BY public.commands.command_id;
+ALTER SEQUENCE public.tasks_task_id_seq OWNED BY public.tasks.task_id;
 
 
 --
@@ -195,23 +195,23 @@ ALTER TABLE public.dependent_systems_dependent_system_id_seq OWNER TO tasker;
 ALTER SEQUENCE public.dependent_systems_dependent_system_id_seq OWNED BY public.dependent_systems.dependent_system_id;
 
 --
--- Name: named_commands; Type: TABLE; Schema: public; Owner: postgres
+-- Name: named_tasks; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.named_commands (
-    named_command_id integer NOT NULL,
+CREATE TABLE public.named_tasks (
+    named_task_id integer NOT NULL,
     name character varying(64) NOT NULL,
     description character varying(255)
 );
 
 
-ALTER TABLE public.named_commands OWNER TO tasker;
+ALTER TABLE public.named_tasks OWNER TO tasker;
 
 --
--- Name: named_commands_named_command_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: named_tasks_named_task_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.named_commands_named_command_id_seq
+CREATE SEQUENCE public.named_tasks_named_task_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -220,22 +220,22 @@ CREATE SEQUENCE public.named_commands_named_command_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.named_commands_named_command_id_seq OWNER TO tasker;
+ALTER TABLE public.named_tasks_named_task_id_seq OWNER TO tasker;
 
 --
--- Name: named_commands_named_command_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: named_tasks_named_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.named_commands_named_command_id_seq OWNED BY public.named_commands.named_command_id;
+ALTER SEQUENCE public.named_tasks_named_task_id_seq OWNED BY public.named_tasks.named_task_id;
 
 
 --
--- Name: named_commands_named_steps; Type: TABLE; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.named_commands_named_steps (
+CREATE TABLE public.named_tasks_named_steps (
     id integer NOT NULL,
-    named_command_id integer NOT NULL,
+    named_task_id integer NOT NULL,
     named_step_id integer NOT NULL,
     skippable boolean DEFAULT false NOT NULL,
     default_retryable boolean DEFAULT true NOT NULL,
@@ -243,13 +243,13 @@ CREATE TABLE public.named_commands_named_steps (
 );
 
 
-ALTER TABLE public.named_commands_named_steps OWNER TO tasker;
+ALTER TABLE public.named_tasks_named_steps OWNER TO tasker;
 
 --
--- Name: named_commands_named_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.named_commands_named_steps_id_seq
+CREATE SEQUENCE public.named_tasks_named_steps_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -258,13 +258,13 @@ CREATE SEQUENCE public.named_commands_named_steps_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.named_commands_named_steps_id_seq OWNER TO tasker;
+ALTER TABLE public.named_tasks_named_steps_id_seq OWNER TO tasker;
 
 --
--- Name: named_commands_named_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.named_commands_named_steps_id_seq OWNED BY public.named_commands_named_steps.id;
+ALTER SEQUENCE public.named_tasks_named_steps_id_seq OWNED BY public.named_tasks_named_steps.id;
 
 
 --
@@ -309,7 +309,7 @@ ALTER SEQUENCE public.named_steps_named_step_id_seq OWNED BY public.named_steps.
 
 CREATE TABLE public.workflow_steps (
     workflow_step_id bigint NOT NULL,
-    command_id bigint NOT NULL,
+    task_id bigint NOT NULL,
     named_step_id integer NOT NULL,
     depends_on_step_id bigint,
     status character varying(64) NOT NULL,
@@ -350,17 +350,17 @@ ALTER SEQUENCE public.workflow_steps_workflow_step_id_seq OWNED BY public.workfl
 
 
 --
--- Name: command_annotations command_annotation_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: task_annotations task_annotation_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.command_annotations ALTER COLUMN command_annotation_id SET DEFAULT nextval('public.command_annotations_command_annotation_id_seq'::regclass);
+ALTER TABLE ONLY public.task_annotations ALTER COLUMN task_annotation_id SET DEFAULT nextval('public.task_annotations_task_annotation_id_seq'::regclass);
 
 
 --
--- Name: commands command_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tasks task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.commands ALTER COLUMN command_id SET DEFAULT nextval('public.commands_command_id_seq'::regclass);
+ALTER TABLE ONLY public.tasks ALTER COLUMN task_id SET DEFAULT nextval('public.tasks_task_id_seq'::regclass);
 
 
 --
@@ -384,17 +384,17 @@ ALTER TABLE ONLY public.dependent_system_object_maps ALTER COLUMN dependent_syst
 ALTER TABLE ONLY public.dependent_systems ALTER COLUMN dependent_system_id SET DEFAULT nextval('public.dependent_systems_dependent_system_id_seq'::regclass);
 
 --
--- Name: named_commands named_command_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: named_tasks named_task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands ALTER COLUMN named_command_id SET DEFAULT nextval('public.named_commands_named_command_id_seq'::regclass);
+ALTER TABLE ONLY public.named_tasks ALTER COLUMN named_task_id SET DEFAULT nextval('public.named_tasks_named_task_id_seq'::regclass);
 
 
 --
--- Name: named_commands_named_steps id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands_named_steps ALTER COLUMN id SET DEFAULT nextval('public.named_commands_named_steps_id_seq'::regclass);
+ALTER TABLE ONLY public.named_tasks_named_steps ALTER COLUMN id SET DEFAULT nextval('public.named_tasks_named_steps_id_seq'::regclass);
 
 
 --
@@ -412,19 +412,19 @@ ALTER TABLE ONLY public.workflow_steps ALTER COLUMN workflow_step_id SET DEFAULT
 
 
 --
--- Name: command_annotations command_annotations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_annotations task_annotations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.command_annotations
-    ADD CONSTRAINT command_annotations_pkey PRIMARY KEY (command_annotation_id);
+ALTER TABLE ONLY public.task_annotations
+    ADD CONSTRAINT task_annotations_pkey PRIMARY KEY (task_annotation_id);
 
 
 --
--- Name: commands commands_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.commands
-    ADD CONSTRAINT commands_pkey PRIMARY KEY (command_id);
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (task_id);
 
 
 --
@@ -475,35 +475,35 @@ ALTER TABLE ONLY public.dependent_systems
     ADD CONSTRAINT dependent_systems_pkey PRIMARY KEY (dependent_system_id);
 
 --
--- Name: named_commands named_commands_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: named_tasks named_tasks_name_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands
-    ADD CONSTRAINT named_commands_name_unique UNIQUE (name);
-
-
---
--- Name: named_commands_named_steps named_commands_named_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.named_commands_named_steps
-    ADD CONSTRAINT named_commands_named_steps_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.named_tasks
+    ADD CONSTRAINT named_tasks_name_unique UNIQUE (name);
 
 
 --
--- Name: named_commands named_commands_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps named_tasks_named_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands
-    ADD CONSTRAINT named_commands_pkey PRIMARY KEY (named_command_id);
+ALTER TABLE ONLY public.named_tasks_named_steps
+    ADD CONSTRAINT named_tasks_named_steps_pkey PRIMARY KEY (id);
 
 
 --
--- Name: named_commands_named_steps named_commands_steps_ids_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: named_tasks named_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands_named_steps
-    ADD CONSTRAINT named_commands_steps_ids_unique UNIQUE (named_command_id, named_step_id);
+ALTER TABLE ONLY public.named_tasks
+    ADD CONSTRAINT named_tasks_pkey PRIMARY KEY (named_task_id);
+
+
+--
+-- Name: named_tasks_named_steps named_tasks_steps_ids_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.named_tasks_named_steps
+    ADD CONSTRAINT named_tasks_steps_ids_unique UNIQUE (named_task_id, named_step_id);
 
 
 --
@@ -531,94 +531,94 @@ ALTER TABLE ONLY public.workflow_steps
 
 
 --
--- Name: command_annotations_command_id_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: task_annotations_task_id_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX command_annotations_command_id_index ON public.command_annotations USING btree (command_id);
-
-
---
--- Name: command_annotations_annotation_idx; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX command_annotations_annotation_idx ON public.command_annotations USING gin (annotation);
+CREATE INDEX task_annotations_task_id_index ON public.task_annotations USING btree (task_id);
 
 
 --
--- Name: command_annotations_annotation_idx1; Type: INDEX; Schema: public; Owner: postgres
+-- Name: task_annotations_annotation_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX command_annotations_annotation_idx1 ON public.command_annotations USING gin (annotation jsonb_path_ops);
-
-
---
--- Name: command_annotations_annotation_type_id_index; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX command_annotations_annotation_type_id_index ON public.command_annotations USING btree (annotation_type_id);
+CREATE INDEX task_annotations_annotation_idx ON public.task_annotations USING gin (annotation);
 
 
 --
--- Name: commands_context_idx; Type: INDEX; Schema: public; Owner: postgres
+-- Name: task_annotations_annotation_idx1; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX commands_context_idx ON public.commands USING gin (context);
-
-
---
--- Name: commands_context_idx1; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX commands_context_idx1 ON public.commands USING gin (context jsonb_path_ops);
+CREATE INDEX task_annotations_annotation_idx1 ON public.task_annotations USING gin (annotation jsonb_path_ops);
 
 
 --
--- Name: commands_identity_hash_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: task_annotations_annotation_type_id_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX commands_identity_hash_index ON public.commands USING btree (identity_hash);
-
-
---
--- Name: commands_named_command_id_index; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX commands_named_command_id_index ON public.commands USING btree (named_command_id);
+CREATE INDEX task_annotations_annotation_type_id_index ON public.task_annotations USING btree (annotation_type_id);
 
 
 --
--- Name: commands_requested_at_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: tasks_context_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX commands_requested_at_index ON public.commands USING btree (requested_at);
-
-
---
--- Name: commands_source_system_index; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX commands_source_system_index ON public.commands USING btree (source_system);
+CREATE INDEX tasks_context_idx ON public.tasks USING gin (context);
 
 
 --
--- Name: commands_status_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: tasks_context_idx1; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX commands_status_index ON public.commands USING btree (status);
-
-
---
--- Name: commands_tags_idx; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX commands_tags_idx ON public.commands USING gin (tags);
+CREATE INDEX tasks_context_idx1 ON public.tasks USING gin (context jsonb_path_ops);
 
 
 --
--- Name: commands_tags_idx1; Type: INDEX; Schema: public; Owner: postgres
+-- Name: tasks_identity_hash_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX commands_tags_idx1 ON public.commands USING gin (tags jsonb_path_ops);
+CREATE INDEX tasks_identity_hash_index ON public.tasks USING btree (identity_hash);
+
+
+--
+-- Name: tasks_named_task_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX tasks_named_task_id_index ON public.tasks USING btree (named_task_id);
+
+
+--
+-- Name: tasks_requested_at_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX tasks_requested_at_index ON public.tasks USING btree (requested_at);
+
+
+--
+-- Name: tasks_source_system_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX tasks_source_system_index ON public.tasks USING btree (source_system);
+
+
+--
+-- Name: tasks_status_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX tasks_status_index ON public.tasks USING btree (status);
+
+
+--
+-- Name: tasks_tags_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX tasks_tags_idx ON public.tasks USING gin (tags);
+
+
+--
+-- Name: tasks_tags_idx1; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX tasks_tags_idx1 ON public.tasks USING gin (tags jsonb_path_ops);
 
 
 --
@@ -664,24 +664,24 @@ CREATE INDEX dependent_systems_name_index ON public.dependent_systems USING btre
 
 
 --
--- Name: named_commands_name_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: named_tasks_name_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX named_commands_name_index ON public.named_commands USING btree (name);
-
-
---
--- Name: named_commands_named_steps_named_command_id_index; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX named_commands_named_steps_named_command_id_index ON public.named_commands_named_steps USING btree (named_command_id);
+CREATE INDEX named_tasks_name_index ON public.named_tasks USING btree (name);
 
 
 --
--- Name: named_commands_named_steps_named_step_id_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps_named_task_id_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX named_commands_named_steps_named_step_id_index ON public.named_commands_named_steps USING btree (named_step_id);
+CREATE INDEX named_tasks_named_steps_named_task_id_index ON public.named_tasks_named_steps USING btree (named_task_id);
+
+
+--
+-- Name: named_tasks_named_steps_named_step_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX named_tasks_named_steps_named_step_id_index ON public.named_tasks_named_steps USING btree (named_step_id);
 
 
 --
@@ -699,10 +699,10 @@ CREATE INDEX named_steps_name_index ON public.named_steps USING btree (name);
 
 
 --
--- Name: workflow_steps_command_id_index; Type: INDEX; Schema: public; Owner: postgres
+-- Name: workflow_steps_task_id_index; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX workflow_steps_command_id_index ON public.workflow_steps USING btree (command_id);
+CREATE INDEX workflow_steps_task_id_index ON public.workflow_steps USING btree (task_id);
 
 
 --
@@ -741,27 +741,27 @@ CREATE INDEX workflow_steps_status_index ON public.workflow_steps USING btree (s
 
 
 --
--- Name: command_annotations command_annotations_command_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_annotations task_annotations_task_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.command_annotations
-    ADD CONSTRAINT command_annotations_command_id_foreign FOREIGN KEY (command_id) REFERENCES public.commands(command_id);
-
-
---
--- Name: command_annotations command_annotations_annotation_type_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.command_annotations
-    ADD CONSTRAINT command_annotations_annotation_type_id_foreign FOREIGN KEY (annotation_type_id) REFERENCES public.annotation_types(annotation_type_id);
+ALTER TABLE ONLY public.task_annotations
+    ADD CONSTRAINT task_annotations_task_id_foreign FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
 
 
 --
--- Name: commands commands_named_command_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task_annotations task_annotations_annotation_type_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.commands
-    ADD CONSTRAINT commands_named_command_id_foreign FOREIGN KEY (named_command_id) REFERENCES public.named_commands(named_command_id);
+ALTER TABLE ONLY public.task_annotations
+    ADD CONSTRAINT task_annotations_annotation_type_id_foreign FOREIGN KEY (annotation_type_id) REFERENCES public.annotation_types(annotation_type_id);
+
+
+--
+-- Name: tasks tasks_named_task_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_named_task_id_foreign FOREIGN KEY (named_task_id) REFERENCES public.named_tasks(named_task_id);
 
 
 --
@@ -781,19 +781,19 @@ ALTER TABLE ONLY public.dependent_system_object_maps
 
 
 --
--- Name: named_commands_named_steps named_commands_named_steps_named_command_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps named_tasks_named_steps_named_task_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands_named_steps
-    ADD CONSTRAINT named_commands_named_steps_named_command_id_foreign FOREIGN KEY (named_command_id) REFERENCES public.named_commands(named_command_id);
+ALTER TABLE ONLY public.named_tasks_named_steps
+    ADD CONSTRAINT named_tasks_named_steps_named_task_id_foreign FOREIGN KEY (named_task_id) REFERENCES public.named_tasks(named_task_id);
 
 
 --
--- Name: named_commands_named_steps named_commands_named_steps_named_step_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: named_tasks_named_steps named_tasks_named_steps_named_step_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.named_commands_named_steps
-    ADD CONSTRAINT named_commands_named_steps_named_step_id_foreign FOREIGN KEY (named_step_id) REFERENCES public.named_steps(named_step_id);
+ALTER TABLE ONLY public.named_tasks_named_steps
+    ADD CONSTRAINT named_tasks_named_steps_named_step_id_foreign FOREIGN KEY (named_step_id) REFERENCES public.named_steps(named_step_id);
 
 
 --
@@ -805,11 +805,11 @@ ALTER TABLE ONLY public.named_steps
 
 
 --
--- Name: workflow_steps workflow_steps_command_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: workflow_steps workflow_steps_task_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.workflow_steps
-    ADD CONSTRAINT workflow_steps_command_id_foreign FOREIGN KEY (command_id) REFERENCES public.commands(command_id);
+    ADD CONSTRAINT workflow_steps_task_id_foreign FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
 
 
 --
