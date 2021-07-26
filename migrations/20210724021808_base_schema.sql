@@ -17,7 +17,7 @@ SET default_tablespace = '';
 
 CREATE TABLE public.task_annotations (
     task_annotation_id bigint NOT NULL,
-    task_id integer NOT NULL,
+    task_id bigint NOT NULL,
     annotation_type_id integer NOT NULL,
     annotation jsonb
 );
